@@ -21,6 +21,9 @@ jobs:
         with:
           python-version: 3.8
 
+      - name: Install databricks CLI
+        run: pip install databricks-cli
+
       - name: Set up Python
         uses: actions/setup-cli@main
 
