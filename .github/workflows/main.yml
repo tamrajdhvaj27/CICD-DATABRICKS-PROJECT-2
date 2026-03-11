@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: action/checkout@v4
+        uses: actions/checkout@v4
         with:
           python-version: 3.8
 
@@ -33,7 +33,7 @@ jobs:
       
       - name: Update Databricks Repo (Dev)
         run: |
-          dataricks repos update "${{env.REPO_PATH}}" --branch "${{steps.extract_branch_dev.outputs.branch}}"
+          databricks repos update "${{env.REPO_PATH}}" --branch "${{steps.extract_branch_dev.outputs.branch}}"
     
   deploy-prod:
     needs: deploy-dev
