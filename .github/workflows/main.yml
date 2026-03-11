@@ -25,9 +25,38 @@ jobs:
         uses: actions/setup-cli@main
 
       - name: Extract branch name
-        id: extract_name
-        run: echo "branch-$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+        id: extract_branch_dev
+        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
       
       - name: Update Databricks Repo (Dev)
         run: |
-          dataricks repos update "${{env.REPO_PATH}}" --branch "${{steps.extract_name.outputs.branch}}"
+          dataricks repos update "${{env.REPO_PATH}}" --branch "${{steps.extract_branch_dev.outputs.branch}}"
+    
+  deploy-prod:
+    needs: deploy-dev
+    runs-on: ubuntu-latest
+    environment: Production
+    env:
+      DATABRICKS_HOST: ${{secrets.PRD_DEPLOYMENT_URL_2}}
+      DATABRICKS_TOKEN: ${{secrets.PROD_DEPLOYMENT_TOKEN_2}}
+      REPO_PATH: ${{vars.PRD_DATABRICKS_GIT_FOLDER_2}}
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.8
+          
+      - name: Set up Python
+        uses: actions/setup-cli@main
+
+      - name: Extract branch name
+        id: extract_branch_prod
+        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+      
+      - name: Update Databricks Repo (Prod)
+        run: |
+          dataricks repos update "${{env.REPO_PATH}}" --branch "${{steps.extract_branch_prod.outputs.branch}}"        
