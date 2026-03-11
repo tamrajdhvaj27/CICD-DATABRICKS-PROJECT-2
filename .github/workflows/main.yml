@@ -1,4 +1,4 @@
-name: Deploy Sales Notebook to Databricks
+name: main
 
 on:
   push:
@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Setup Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@main
         with:
           python-version: 3.8
 
