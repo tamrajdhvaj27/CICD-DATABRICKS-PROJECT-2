@@ -1,5 +1,6 @@
 name: main
-on: 
+
+on:
   push:
     paths-ignore:
       - .github/**
@@ -7,59 +8,65 @@ on:
       - main
 
 jobs:
+
   deploy-dev:
     runs-on: ubuntu-latest
     environment: development
+
     env:
-      DATABRICKS_HOST: ${{secrets.DEV_DEPLOYMENT_URL_2}}
-      DATABRICKS_TOKEN: ${{secrets.DEV_DEPLOYMENT_TOKEN_2}}
-      REPO_PATH: ${{vars.DEV_DATABRICKS_GIT_FOLDER_2}}
+      DATABRICKS_HOST: ${{ secrets.DEV_DEPLOYMENT_URL_2 }}
+      DATABRICKS_TOKEN: ${{ secrets.DEV_DEPLOYMENT_TOKEN_2 }}
+      REPO_PATH: ${{ vars.DEV_DATABRICKS_GIT_FOLDER_2 }}
 
     steps:
+
       - name: Checkout repository
         uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: 3.8
 
-      - name: Install databricks CLI
+      - name: Install Databricks CLI
         run: pip install databricks-cli
-
-      - name: Set up Python
-        uses: actions/setup-cli@v5
 
       - name: Extract branch name
         id: extract_branch_dev
-        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
-      
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+
       - name: Update Databricks Repo (Dev)
         run: |
-          databricks repos update "${{env.REPO_PATH}}" --branch "${{steps.extract_branch_dev.outputs.branch}}"
-    
+          databricks repos update "${REPO_PATH}" --branch "${{ steps.extract_branch_dev.outputs.branch }}"
+
+
   deploy-prod:
     needs: deploy-dev
     runs-on: ubuntu-latest
     environment: Production
+
     env:
-      DATABRICKS_HOST: ${{secrets.PRD_DEPLOYMENT_URL_2}}
-      DATABRICKS_TOKEN: ${{secrets.PROD_DEPLOYMENT_TOKEN_2}}
-      REPO_PATH: ${{vars.PRD_DATABRICKS_GIT_FOLDER_2}}
+      DATABRICKS_HOST: ${{ secrets.PRD_DEPLOYMENT_URL_2 }}
+      DATABRICKS_TOKEN: ${{ secrets.PROD_DEPLOYMENT_TOKEN_2 }}
+      REPO_PATH: ${{ vars.PRD_DATABRICKS_GIT_FOLDER_2 }}
 
     steps:
-      - name: Checkout Repository
+
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
+      - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: 3.8
-          
-      - name: Set up Python
-        uses: actions/setup-cli@main
+
+      - name: Install Databricks CLI
+        run: pip install databricks-cli
 
       - name: Extract branch name
         id: extract_branch_prod
-        run: echo "branch=$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
-      
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_OUTPUT
+
       - name: Update Databricks Repo (Prod)
         run: |
-          dataricks repos update "${{env.REPO_PATH}}" --branch "${{steps.extract_branch_prod.outputs.branch}}"        
+          databricks repos update "${REPO_PATH}" --branch "${{ steps.extract_branch_prod.outputs.branch }}"
