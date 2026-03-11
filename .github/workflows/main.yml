@@ -1,4 +1,4 @@
-name: main
+name: Deploy Sales Notebook to Databricks
 
 on:
   push:
@@ -21,12 +21,12 @@ jobs:
     steps:
 
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.8'
+          python-version: 3.8
 
       - name: Install Databricks CLI
         run: pip install databricks-cli
@@ -37,7 +37,7 @@ jobs:
 
       - name: Update Databricks Repo (Dev)
         run: |
-          databricks repos update "${REPO_PATH}" --branch "${{ steps.extract_branch_dev.outputs.branch }}"
+          databricks repos update "${env.REPO_PATH}" --branch "${{ steps.extract_branch_dev.outputs.branch }}"
 
 
   deploy-prod:
