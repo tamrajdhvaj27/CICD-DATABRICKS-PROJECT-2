@@ -37,7 +37,7 @@ jobs:
 
       - name: Update Databricks Repo (Dev)
         run: |
-          databricks repos update --path "/Workspace/Users/tamraj.dhvaj@zohomail.in/DEV-DATABRICKS-GIT-FOLDER-2/" --branch "${{ steps.extract_branch_dev.outputs.branch }}"
+          databricks repos update --path "/Workspace/Repos/tamraj.dhvaj@zohomail.in/CICD-DATABRICKS-PROJECT-2" --branch "${{ steps.extract_branch_dev.outputs.branch }}"
 
 
   deploy-prod:
