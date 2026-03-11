@@ -1,0 +1,33 @@
+name: databricks deployment
+on: 
+  push:
+    paths-ignore:
+      - .github/**
+    branches:
+      - main
+
+jobs:
+  deploy-dev:
+    runs-on: ubuntu-latest
+    environment: development
+    env:
+      DATABRICKS_HOST: ${{secrets.DEV_DEPLOYMENT_URL_2}}
+      DATABRICKS_TOKEN: ${{secrets.DEV_DEPLOYMENT_TOKEN_2}}
+      REPO_PATH: ${{vars.DEV_DATABRICKS_GIT_FOLDER_2}}
+
+    steps:
+      - name: Checkout repository
+        uses: action/checkout@v3
+        with:
+          python-version: 3.8
+
+      - name: Set up Python
+        uses: actions/setup-cli@main
+
+      - name: Extract branch name
+        id: extract_name
+        run: echo "branch-$(echo ${GITHUB_REF#refs/heads/})" >> $GITHUB_OUTPUT
+      
+      - name: Update Databricks Repo (Dev)
+        run: |
+          dataricks repos update "${{env.REPO_PATH}}" --branch "${{steps.extract_name.outputs.branch}}"
