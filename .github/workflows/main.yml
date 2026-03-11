@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: action/checkout@v3
+        uses: action/checkout@v4
         with:
           python-version: 3.8
 
@@ -25,7 +25,7 @@ jobs:
         run: pip install databricks-cli
 
       - name: Set up Python
-        uses: actions/setup-cli@main
+        uses: actions/setup-cli@v5
 
       - name: Extract branch name
         id: extract_branch_dev
@@ -46,10 +46,10 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: 3.8
           
