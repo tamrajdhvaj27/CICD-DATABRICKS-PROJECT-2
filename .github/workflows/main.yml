@@ -69,4 +69,4 @@ jobs:
 
       - name: Update Databricks Repo (Prod)
         run: |
-          databricks workspace update --path "${{env.REPO_PATH}}" --branch "${{ steps.extract_branch_prod.outputs.branch }}"
+          databricks workspace update --path "${{env.WORKSPACE_PATH}}" --branch "${{ steps.extract_branch_prod.outputs.branch }}"
