@@ -48,7 +48,7 @@ jobs:
     env:
       DATABRICKS_HOST: ${{ secrets.PRD_DEPLOYMENT_URL_2 }}
       DATABRICKS_TOKEN: ${{ secrets.PROD_DEPLOYMENT_TOKEN_2 }}
-      REPO_PATH: ${{ vars.PRD_DATABRICKS_GIT_FOLDER_2 }}
+      WORKSPACE_PATH: ${{ vars.PRD_DATABRICKS_GIT_FOLDER_2 }}
 
     steps:
 
